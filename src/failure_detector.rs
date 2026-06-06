@@ -5,7 +5,7 @@ use tokio::sync::Mutex;
 use tokio::time;
 use crate::membership::MembershipList;
 use crate::transport::NetworkLayer;
-use crate::dissemination::DisseminationComponent;
+use crate::disseminator::DisseminationComponent;
 
 pub struct FailureDetector {
     membership: Arc<Mutex<MembershipList>>,
