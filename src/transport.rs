@@ -43,7 +43,7 @@ impl NetworkLayer {
         
         loop {
             match socket.recv_from(&mut buf).await {
-                Ok((size, src)) => {
+                Ok((size, _src)) => {
                     if let Ok(message) = bincode::deserialize(&buf[..size]) {
                         match message {
                             SwimMessage::Ack { to, seq } => {
@@ -71,7 +71,7 @@ impl NetworkLayer {
     }
     
     pub async fn send_ping(&self, target: SocketAddr) -> std::io::Result<()> {
-        let seq = rand::random();
+        let seq = rand::random::<u64>();
         let msg = SwimMessage::Ping { from: self.socket.local_addr()?, seq };
         let data = bincode::serialize(&msg).unwrap();
         self.socket.send_to(&data, target).await?;
@@ -91,9 +91,9 @@ impl NetworkLayer {
     }
     
     pub async fn send_ping_req(&self, helper: SocketAddr, target: SocketAddr, timeout_dur: Duration) -> Result<bool, ()> {
-        let seq = rand::random();
+        let seq = rand::random::<u64>();
         let msg = SwimMessage::PingReq {
-            from: self.socket.local_addr()?,
+            from: self.socket.local_addr().map_err(|_| ())?,
             target,
             seq,
         };

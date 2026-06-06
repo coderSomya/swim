@@ -48,8 +48,16 @@ impl MembershipList {
         if alive.is_empty() {
             None
         } else {
-            Some(alive[rand::random::<usize>() % alive.len()])
+            let idx = (rand::random::<u64>() as usize) % alive.len();
+            Some(alive[idx])
         }
+    }
+
+    pub fn get_alive_members(&self) -> Vec<SocketAddr> {
+        self.members.iter()
+            .filter(|(_, m)| matches!(m.state, MemberState::Alive))
+            .map(|(addr, _)| *addr)
+            .collect()
     }
 
     pub fn mark_suspected(&mut self, addr: SocketAddr, incarnation: u64) -> bool {

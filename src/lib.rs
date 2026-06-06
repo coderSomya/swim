@@ -4,7 +4,9 @@ mod membership;
 mod transport;
 
 mod tests {
-    use crate::transport;
+    use crate::membership;
+    use crate::disseminator;
+    use crate::failure_detector;
     use std::net::SocketAddr;
     use std::sync::Arc;
     use std::time::Duration;

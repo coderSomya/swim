@@ -60,7 +60,7 @@ impl DisseminationComponent {
         let mut updates = Vec::new();
         
         // Take up to 6 updates (max packet size ~135B)
-        while let Some((update, count)) = pending.pop_front() {
+        while let Some((update, _count)) = pending.pop_front() {
             updates.push(update);
             if updates.len() >= 6 {
                 break;

@@ -58,7 +58,7 @@ impl FailureDetector {
 
     async fn probe_member(&self, target: SocketAddr) {
         // Send direct ping
-        let start = std::time::Instant::now();
+        let _start = std::time::Instant::now();
         
         match self.network.send_ping(target).await {
             Ok(()) => {
@@ -108,13 +108,13 @@ impl FailureDetector {
 
     async fn get_random_members(&self, count: usize) -> Vec<SocketAddr> {
         let membership = self.membership.lock().await;
-        let alive_members: Vec<_> = membership.get_alive_members(); // TODO
+        let alive_members: Vec<_> = membership.get_alive_members();
         
         let mut result = Vec::new();
         let n = alive_members.len();
         
         while result.len() < count.min(n) {
-            let idx = rand::random::<usize>() % n;
+            let idx = (rand::random::<u64>() as usize) % n;
             let candidate = alive_members[idx];
             if !result.contains(&candidate) {
                 result.push(candidate);
